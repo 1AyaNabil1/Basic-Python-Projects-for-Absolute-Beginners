@@ -47,13 +47,13 @@ def play_again_prompt():
 def display_hangman(attempts):
     hangman_states = [
         """
-           _____ 
-          |      
-          |      
-          |      
-          |      
-          |      
-          |      
+           _____
+          |
+          |
+          |
+          |
+          |
+          |
         __|__
         """,
         """
