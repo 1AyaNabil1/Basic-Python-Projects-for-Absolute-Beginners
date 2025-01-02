@@ -46,7 +46,7 @@ def play_again_prompt():
 # Display the current state of the hangman
 def display_hangman(attempts):
     hangman_states = [
-        """
+        """ 
            _____
           |
           |
