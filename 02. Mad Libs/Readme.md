@@ -69,13 +69,13 @@ Here’s a step-by-step breakdown of how this project works:
 
 ### Example Gameplay:  
 1. **Main Window**:  
-   ![Main Window](02.%20Mad%20Libs/img/Screenshot%202025-01-03%20174807.png)  
+   ![Main Window](img/Screenshot%202025-01-03%20174807.png)  
 
 2. **Input Window**:  
-   ![Input Window](02.%20Mad%20Libs/img/Screenshot%202025-01-03%20174926.png)  
+   ![Input Window](img/Screenshot%202025-01-03%20174926.png)  
 
 3. **Generated Story**:  
-   ![Generated Story](02.%20Mad%20Libs/img/Screenshot%202025-01-03%20175303.png)
+   ![Generated Story](img/Screenshot%202025-01-03%20175303.png)
 ---
 ## 📖 Summary:
 **With this project, you’ve learned how to:**
