@@ -64,22 +64,26 @@ Here’s a step-by-step breakdown of how this project works:
    - on a Mad Libs button to start.
    - Enter the requested words in the popup window.
    - Enjoy the hilarious story that’s generated!
-## 📸 Project Output
-**Example Gameplay:**
-1. **Main Window:**
-![Main Window](02. Mad Libs\img\Screenshot 2025-01-03 174807.png)
-2. **Input Window:**
-![Input Window](02. Mad Libs\img\Screenshot 2025-01-03 174926.png)
-3. **Generated Story:**
-![Generated Story](02. Mad Libs\img\Screenshot 2025-01-03 175303.png)
+- --
+## 📸 Project Output  
 
+### Example Gameplay:  
+1. **Main Window**:  
+   ![Main Window](02.%20Mad%20Libs/img/Screenshot%202025-01-03%20174807.png)  
+
+2. **Input Window**:  
+   ![Input Window](02.%20Mad%20Libs/img/Screenshot%202025-01-03%20174926.png)  
+
+3. **Generated Story**:  
+   ![Generated Story](02.%20Mad%20Libs/img/Screenshot%202025-01-03%20175303.png)
+---
 ## 📖 Summary:
 **With this project, you’ve learned how to:**
 1. Create a simple GUI using Tkinter.
 2. Use functions to organize your code.
 3. Handle user input and dynamically generate stories.
 4. Build a fun and interactive Python project from scratch.
-
+---
 ## ✨ Credits
 This project is proudly developed by `Aya Nabil`.
 
