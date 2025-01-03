@@ -6,7 +6,7 @@ root = Tk()
 root.geometry("400x500")
 root.title("Aya Nabil - Mad Libs Generator")
 
-# Add Title and Instructions
+## Add Title and Instructions
 Label(
     root, text="Mad Libs Generator\nHave Fun!", font="Arial 20 bold").pack(pady=10)
 Label(root, text="Click Any One:", font="Arial 15 bold").pack(pady=5)
