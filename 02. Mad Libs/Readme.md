@@ -56,7 +56,7 @@ Here’s a step-by-step breakdown of how this project works:
 1. **Clone or Download the Repository**:
    ```bash
    git clone https://github.com/1AyaNabil1/Basic-Python-Projects-for-Absolute-Beginners.git
-   cd Mad-Libs-Generator
+   cd Basic-Python-Projects-for-Absolute-Beginners/02.\ Mad\ Libs\ Generator
 2. **Run the Script:**
    ```bash
    python mad_libs.py
