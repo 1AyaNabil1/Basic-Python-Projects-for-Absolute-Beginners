@@ -2,10 +2,12 @@
     "cSpell.words": [
         "activebackground",
         "columnspan",
+        "Gameplay",
         "madlib",
         "Nabil",
         "padx",
         "pady",
-        "textvariable"
+        "textvariable",
+        "Tkinter"
     ]
 }
