@@ -113,10 +113,8 @@ Here’s a step-by-step breakdown of how this project works:
    ![Main Window](img/image.png)
 
 2. **Generated Password**:
-   ![Input Window](img/img%202.png)
+   ![Input Window](img/img_2.png)
 
-3. **Copy to Clipboard:**
-   ![Input Window](img/img%202.png)
 
 ---
 
