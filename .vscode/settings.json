@@ -1,9 +1,11 @@
 {
     "cSpell.words": [
+        "activebackground",
         "columnspan",
         "madlib",
         "Nabil",
         "padx",
-        "pady"
+        "pady",
+        "textvariable"
     ]
 }
