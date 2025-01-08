@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "activebackground",
+        "borderwidth",
         "columnspan",
         "Gameplay",
         "madlib",
@@ -8,6 +9,7 @@
         "padx",
         "pady",
         "textvariable",
-        "Tkinter"
+        "Tkinter",
+        "validatecommand"
     ]
 }
