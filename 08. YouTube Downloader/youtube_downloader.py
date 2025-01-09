@@ -2,26 +2,27 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from pytube import YouTube
+from pytube.exceptions import AgeRestrictedError
+import pytube.request
+from yt_dlp import YoutubeDL
 
 
 # Function to download the YouTube video
 def download_video():
     try:
-        # Get the URL from the entry widget
-        url = YouTube(str(link.get()))
-        # Ask the user to choose the download location
+        video_url = str(link.get())
         download_path = filedialog.askdirectory(title="Select Download Location")
         if download_path:
-            # Get the first available video stream and download it to the selected location
-            video = url.streams.first()
-            video.download(download_path)
-            # Show a success message
+            ydl_opts = {
+                "outtmpl": f"{download_path}/%(title)s.%(ext)s",  # Save video to the selected location
+                "format": "best",  # Download the best quality available
+            }
+            with YoutubeDL(ydl_opts) as ydl:
+                ydl.download([video_url])
             messagebox.showinfo("Success", "Video Downloaded Successfully!")
         else:
-            # Show a message if no location is selected
             messagebox.showwarning("Warning", "No download location selected!")
     except Exception as e:
-        # Show an error message if something goes wrong
         messagebox.showerror("Error", f"An error occurred: {e}")
 
 
