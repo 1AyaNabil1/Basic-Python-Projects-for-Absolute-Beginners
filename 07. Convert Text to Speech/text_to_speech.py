@@ -3,13 +3,14 @@ from tkinter import StringVar
 from gtts import gTTS
 import pygame
 import os
+import tempfile
 
 # Initialize pygame mixer
 pygame.mixer.init()
 
 # Constants for repeated values
 FONT_STYLE = "arial 15 bold"
-AUDIO_FILE = "output.mp3"
+AUDIO_FILE = os.path.join(tempfile.gettempdir(), "output.mp3")  # Save in temp directory
 
 # Initialize the main window
 root = tk.Tk()
@@ -47,6 +48,8 @@ entry_field.pack(pady=10)
 def text_to_speech():
     message = entry_field.get()  # Get text from the entry field
     if message:  # Check if the input is not empty
+        if os.path.exists(AUDIO_FILE):  # Check if the file already exists
+            os.remove(AUDIO_FILE)  # Delete the existing file
         speech = gTTS(text=message, lang="en")  # Convert text to speech
         speech.save(AUDIO_FILE)  # Save the audio file
         pygame.mixer.music.load(AUDIO_FILE)  # Load the audio file
