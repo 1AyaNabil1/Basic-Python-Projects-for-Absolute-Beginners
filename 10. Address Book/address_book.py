@@ -1,101 +1,275 @@
-from tkinter import *
+import tkinter as tk
+from tkinter import messagebox
 
-root = Tk()
-root.geometry("400x400")
-root.config(bg="SlateGray3")
-root.resizable(0, 0)
-root.title("DataFlair-AddressBook")
+# Initialize the main window
+root = tk.Tk()
+root.geometry("600x450")  # Adjusted window size for better spacing
+root.config(bg="#2E3440")  # Modern dark theme
+root.resizable(0, 0)  # Disable resizing
+root.title("Aya Nabil - Address Book")
 
-contactlist = [
-    ["Parv Maheswari", "0176738493"],
-    ["David Sharma", "2684430000"],
-    ["Mandish Kabra", "4338354432"],
-    ["Prisha Modi", "6834552341"],
-    ["Rahul kaushik", "1234852689"],
-    ["Johena Shaa", "2119876543"],
+# Sample contact list with Egyptian-like names
+contact_list = [
+    ["Ahmed Hassan", "01012345678"],
+    ["Mariam Ali", "01123456789"],
+    ["Youssef Mahmoud", "01234567890"],
+    ["Fatima Ibrahim", "01567891234"],
+    ["Omar Khaled", "01098765432"],
+    ["Layla Samir", "01187654321"],
 ]
 
-Name = StringVar()
-Number = StringVar()
+# Variables to store user input
+name_var = tk.StringVar()
+number_var = tk.StringVar()
 
-frame = Frame(root)
-frame.pack(side=RIGHT)
+# Constants for repeated values
+FONT_LARGE = ("Arial", 12, "bold")
+FONT_SMALL = ("Arial", 10)
+BG_COLOR = "#2E3440"
+FG_COLOR = "#D8DEE9"
+ENTRY_BG = "#4C566A"
+ENTRY_FG = "#ECEFF4"
+BUTTON_BG = "#5E81AC"
+BUTTON_FG = "#ECEFF4"
+BUTTON_ACTIVE_BG = "#81A1C1"  # Active button color
+BUTTON_RADIUS = 10  # Rounded corners radius
 
-scroll = Scrollbar(frame, orient=VERTICAL)
-select = Listbox(frame, yscrollcommand=scroll.set, height=12)
+
+# Custom rounded button class
+class RoundedButton(tk.Canvas):
+    def __init__(self, master=None, text="", command=None, **kwargs):
+        # Remove unsupported options from kwargs
+        self.bg = kwargs.pop("bg", BUTTON_BG)  # Background color
+        self.fg = kwargs.pop("fg", BUTTON_FG)  # Text color
+        self.active_bg = kwargs.pop(
+            "active_bg", BUTTON_ACTIVE_BG
+        )  # Active background color
+        self.radius = kwargs.pop("radius", BUTTON_RADIUS)  # Corner radius
+        self.width = kwargs.pop("width", 100)  # Button width
+        self.height = kwargs.pop("height", 30)  # Button height
+
+        # Initialize the Canvas
+        super().__init__(master, **kwargs)
+        self.command = command
+        self.text = text
+
+        # Configure the canvas
+        self.config(
+            bg=BG_COLOR, highlightthickness=0, width=self.width, height=self.height
+        )
+        self.draw_button()
+        self.bind("<Button-1>", self.on_click)
+
+    def draw_button(self):
+        """Draw the rounded button with text."""
+        self.delete("all")
+        self.create_rounded_rectangle(
+            0, 0, self.width, self.height, radius=self.radius, fill=self.bg
+        )
+        self.create_text(
+            self.width // 2,
+            self.height // 2,
+            text=self.text,
+            font=FONT_SMALL,
+            fill=self.fg,  # Use fg only here
+        )
+
+    def create_rounded_rectangle(self, x1, y1, x2, y2, radius=10, **kwargs):
+        """Create a rounded rectangle."""
+        points = [
+            x1 + radius,
+            y1,
+            x2 - radius,
+            y1,
+            x2,
+            y1,
+            x2,
+            y1 + radius,
+            x2,
+            y2 - radius,
+            x2,
+            y2,
+            x2 - radius,
+            y2,
+            x1 + radius,
+            y2,
+            x1,
+            y2,
+            x1,
+            y2 - radius,
+            x1,
+            y1 + radius,
+            x1,
+            y1,
+        ]
+        return self.create_polygon(points, **kwargs, smooth=True)
+
+    def on_click(self, event):
+        """Handle button click event."""
+        if self.command:
+            self.command()
+
+
+# Frame for the contact list
+frame = tk.Frame(root, bg=BG_COLOR)
+frame.pack(side=tk.RIGHT, padx=20, pady=20)
+
+# Scrollbar for the contact list
+scroll = tk.Scrollbar(frame, orient=tk.VERTICAL)
+select = tk.Listbox(
+    frame,
+    yscrollcommand=scroll.set,
+    height=12,
+    bg=ENTRY_BG,
+    fg=ENTRY_FG,
+    font=FONT_SMALL,
+    selectbackground=BUTTON_BG,
+)
 scroll.config(command=select.yview)
-scroll.pack(side=RIGHT, fill=Y)
-select.pack(side=LEFT, fill=BOTH, expand=1)
+scroll.pack(side=tk.RIGHT, fill=tk.Y)
+select.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+
+# Bind listbox selection to display phone number
+select.bind("<<ListboxSelect>>", lambda event: view_contact())
 
 
-def Selected():
-    return int(select.curselection()[0])
+def selected():
+    """Get the index of the selected contact."""
+    try:
+        return int(select.curselection()[0])
+    except IndexError:
+        return None  # Return None if no contact is selected
 
 
-def AddContact():
-    contactlist.append([Name.get(), Number.get()])
-    Select_set()
+def add_contact():
+    """Add a new contact to the list."""
+    name = name_var.get()
+    number = number_var.get()
+    if name and number:  # Ensure both fields are filled
+        contact_list.append([name, number])
+        update_list()
+        reset_fields()
+    else:
+        messagebox.showwarning("Input Error", "Please fill in both fields!")
 
 
-def EDIT():
-    contactlist[Selected()] = [Name.get(), Number.get()]
-    Select_set()
+def edit_contact():
+    """Edit the selected contact."""
+    index = selected()
+    if index is None:
+        messagebox.showwarning("No Selection", "Please select a contact first!")
+        return
+
+    name = name_var.get()
+    if name:  # Ensure the name field is filled
+        contact_list[index][0] = name  # Update only the name
+        update_list()
+    else:
+        messagebox.showwarning("Input Error", "Please fill in the name field!")
 
 
-def DELETE():
-    del contactlist[Selected()]
-    Select_set()
+def delete_contact():
+    """Delete the selected contact."""
+    index = selected()
+    if index is None:
+        messagebox.showwarning("No Selection", "Please select a contact first!")
+        return
+
+    del contact_list[index]
+    update_list()
+    reset_fields()
 
 
-def VIEW():
-    NAME, PHONE = contactlist[Selected()]
-    Name.set(NAME)
-    Number.set(PHONE)
+def view_contact():
+    """View the selected contact's details."""
+    index = selected()
+    if index is not None:
+        name, number = contact_list[index]
+        name_var.set(name)
+        number_var.set(number)
 
 
-def EXIT():
-    root.destroy()
+def reset_fields():
+    """Clear the input fields."""
+    name_var.set("")
+    number_var.set("")
 
 
-def RESET():
-    Name.set("")
-    Number.set("")
+def update_list():
+    """Update the contact list in the GUI."""
+    contact_list.sort(key=lambda x: x[0])  # Sort by name
+    select.delete(0, tk.END)
+    for name, number in contact_list:
+        select.insert(tk.END, name)
 
 
-def Select_set():
-    contactlist.sort()
-    select.delete(0, END)
-    for name, phone in contactlist:
-        select.insert(END, name)
+# Initialize the contact list
+update_list()
 
-
-Select_set()
-
-Label(root, text="NAME", font="arial 12 bold", bg="SlateGray3").place(x=30, y=20)
-Entry(root, textvariable=Name).place(x=100, y=20)
-
-Label(root, text="PHONE NO.", font="arial 12 bold", bg="SlateGray3").place(x=30, y=70)
-Entry(root, textvariable=Number).place(x=130, y=70)
-
-Button(
-    root, text=" ADD", font="arial 12 bold", bg="SlateGray4", command=AddContact
-).place(x=50, y=110)
-Button(root, text="EDIT", font="arial 12 bold", bg="SlateGray4", command=EDIT).place(
-    x=50, y=260
+# Labels and Entry fields
+tk.Label(root, text="NAME", font=FONT_LARGE, bg=BG_COLOR, fg=FG_COLOR).place(x=30, y=20)
+tk.Entry(root, textvariable=name_var, font=FONT_SMALL, bg=ENTRY_BG, fg=ENTRY_FG).place(
+    x=150, y=20, width=200
 )
 
-Button(
-    root, text="DELETE", font="arial 12 bold", bg="SlateGray4", command=DELETE
-).place(x=50, y=210)
-Button(root, text="VIEW", font="arial 12 bold", bg="SlateGray4", command=VIEW).place(
-    x=50, y=160
+tk.Label(root, text="PHONE NO.", font=FONT_LARGE, bg=BG_COLOR, fg=FG_COLOR).place(
+    x=30, y=70
 )
+tk.Entry(
+    root, textvariable=number_var, font=FONT_SMALL, bg=ENTRY_BG, fg=ENTRY_FG
+).place(x=150, y=70, width=200)
 
-Button(root, text="EXIT", font="arial 12 bold", bg="tomato", command=EXIT).place(
-    x=300, y=320
-)
-Button(root, text="RESET", font="arial 12 bold", bg="SlateGray4", command=RESET).place(
-    x=50, y=310
-)
+# Buttons with rounded edges
+RoundedButton(
+    root,
+    text="ADD",
+    width=100,
+    height=30,
+    bg=BUTTON_BG,
+    fg=BUTTON_FG,
+    active_bg=BUTTON_ACTIVE_BG,
+    command=add_contact,
+).place(x=50, y=120)
+RoundedButton(
+    root,
+    text="EDIT",
+    width=100,
+    height=30,
+    bg=BUTTON_BG,
+    fg=BUTTON_FG,
+    active_bg=BUTTON_ACTIVE_BG,
+    command=edit_contact,
+).place(x=50, y=170)
+RoundedButton(
+    root,
+    text="DELETE",
+    width=100,
+    height=30,
+    bg=BUTTON_BG,
+    fg=BUTTON_FG,
+    active_bg=BUTTON_ACTIVE_BG,
+    command=delete_contact,
+).place(x=50, y=220)
+RoundedButton(
+    root,
+    text="RESET",
+    width=100,
+    height=30,
+    bg=BUTTON_BG,
+    fg=BUTTON_FG,
+    active_bg=BUTTON_ACTIVE_BG,
+    command=reset_fields,
+).place(x=50, y=270)
+RoundedButton(
+    root,
+    text="EXIT",
+    width=100,
+    height=30,
+    bg="#BF616A",
+    fg=BUTTON_FG,
+    active_bg="#D08770",
+    command=root.destroy,
+).place(x=50, y=320)
 
+# Start the main event loop
 root.mainloop()
