@@ -22,6 +22,9 @@ contact_list = [
 name_var = tk.StringVar()
 number_var = tk.StringVar()
 
+# Track the currently selected contact index
+selected_index = None
+
 # Constants for repeated values
 FONT_LARGE = ("Arial", 12, "bold")
 FONT_SMALL = ("Arial", 10)
@@ -134,11 +137,14 @@ select.bind("<<ListboxSelect>>", lambda event: view_contact())
 
 
 def selected():
-    """Get the index of the selected contact."""
+    """Get the index of the currently selected contact."""
+    global selected_index
     try:
-        return int(select.curselection()[0])
+        selected_index = int(select.curselection()[0])
+        return selected_index
     except IndexError:
-        return None  # Return None if no contact is selected
+        selected_index = None
+        return None
 
 
 def add_contact():
@@ -154,37 +160,53 @@ def add_contact():
 
 
 def edit_contact():
-    """Edit the selected contact."""
-    index = selected()
-    if index is None:
+    """Edit the currently selected contact."""
+    global selected_index
+    if selected_index is None:
         messagebox.showwarning("No Selection", "Please select a contact first!")
         return
 
-    name = name_var.get()
-    if name:  # Ensure the name field is filled
-        contact_list[index][0] = name  # Update only the name
-        update_list()
-    else:
-        messagebox.showwarning("Input Error", "Please fill in the name field!")
+    # Get the current contact details
+    current_name, current_number = contact_list[selected_index]
+
+    # Get the new values from the input fields
+    new_name = name_var.get()
+    new_number = number_var.get()
+
+    # Check if any changes were made
+    if new_name == current_name and new_number == current_number:
+        messagebox.showinfo("No Changes", "No changes were made to the contact.")
+        return
+
+    # Update the contact
+    if new_name:  # If the name is changed
+        contact_list[selected_index][0] = new_name
+    if new_number:  # If the number is changed
+        contact_list[selected_index][1] = new_number
+
+    update_list()
+    messagebox.showinfo("Success", "Contact updated successfully!")
 
 
 def delete_contact():
-    """Delete the selected contact."""
-    index = selected()
-    if index is None:
+    """Delete the currently selected contact."""
+    global selected_index
+    if selected_index is None:
         messagebox.showwarning("No Selection", "Please select a contact first!")
         return
 
-    del contact_list[index]
+    del contact_list[selected_index]
     update_list()
     reset_fields()
+    selected_index = None  # Reset the selected index
 
 
 def view_contact():
     """View the selected contact's details."""
-    index = selected()
-    if index is not None:
-        name, number = contact_list[index]
+    global selected_index
+    selected_index = selected()
+    if selected_index is not None:
+        name, number = contact_list[selected_index]
         name_var.set(name)
         number_var.set(number)
 
