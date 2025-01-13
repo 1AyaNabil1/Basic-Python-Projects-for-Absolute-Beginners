@@ -107,6 +107,7 @@ Ensure you have the following installed:
 
 Get started now and make your message communication secure with ease! If you found this project helpful, feel free to star the repository and contribute. Happy coding! 😄
 
+
 ---
 
 ## 🔗 Resources
@@ -114,3 +115,10 @@ Get started now and make your message communication secure with ease! If you fou
 - [Python Documentation](https://docs.python.org/3/)
 - [Base64 Module Documentation](https://docs.python.org/3/library/base64.html)
 - [Tkinter Guide](https://docs.python.org/3/library/tkinter.html)
+
+---
+## ✨ Credits
+
+This project is proudly developed by `Aya Nabil`.
+
+**Stay tuned for more beginner-friendly projects and updates! 😊**
