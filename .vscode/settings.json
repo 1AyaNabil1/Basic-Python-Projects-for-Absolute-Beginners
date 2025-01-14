@@ -1,17 +1,21 @@
 {
     "cSpell.words": [
         "activebackground",
+        "blit",
         "borderwidth",
         "columnspan",
+        "displayword",
         "Gameplay",
         "gtts",
         "Hassan",
         "highlightthickness",
         "Ibrahim",
+        "KEYUP",
         "Khaled",
         "madlib",
         "Mahmoud",
         "Mariam",
+        "midtop",
         "Nabil",
         "padx",
         "pady",
@@ -22,6 +26,7 @@
         "Tkinter",
         "urlsafe",
         "validatecommand",
+        "yourword",
         "Youssef",
         "yscrollcommand"
     ]
