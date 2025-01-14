@@ -32,7 +32,15 @@ Ensure you have the following installed:
 - **Python 3.x**: Make sure to have Python installed on your machine. [Download Python](https://www.python.org/downloads/)
 
 ---
+## 🖼 Project Output
 
+### Main Window
+
+<p align="center">
+  <img src="img/image.png" alt="Main Window">
+</p>
+
+---
 ## ⏱ Usage Instructions
 
 1. **Clone the Repository**:
