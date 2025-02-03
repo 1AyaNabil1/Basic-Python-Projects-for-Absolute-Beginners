@@ -1,31 +1,41 @@
 from tkinter import *
-import parser
 from math import factorial
 
 # Initialize the main window
 root = Tk()
 root.title("Python Calculator - By Aya Nabil")
 root.geometry("400x500")  # Set a fixed window size
-root.configure(bg="#2E3440")  # Dark background for a modern look
+root.resizable(False, False)  # Disable resizing
+root.configure(bg="#2E3440")  # Set a dark theme background
 
-# Adding the input field
+# Custom colors for the calculator
+BG_COLOR = "#2E3440"
+BUTTON_COLOR = "#4C566A"
+TEXT_COLOR = "#D8DEE9"
+DISPLAY_COLOR = "#3B4252"
+ERROR_COLOR = "#BF616A"
+
+# Adding the input field (display)
 display = Entry(
-    root, font=("Arial", 20), justify="right", bd=10, bg="#3B4252", fg="#ECEFF4"
+    root,
+    font=("Arial", 24),
+    bg=DISPLAY_COLOR,
+    fg=TEXT_COLOR,
+    bd=10,
+    relief=FLAT,
+    justify=RIGHT,
 )
 display.grid(row=0, column=0, columnspan=6, sticky=N + E + W + S, padx=10, pady=10)
 
-# Global variable to keep track of the current position in the input field
-i = 0
 
-
-# Function to add numbers and operators to the display
+# Function to insert numbers into the display
 def get_variables(num):
     global i
     display.insert(i, num)
     i += 1
 
 
-# Function to add operations to the display
+# Function to insert operations into the display
 def get_operation(operator):
     global i
     length = len(operator)
@@ -54,8 +64,8 @@ def undo():
 def calculate():
     entire_string = display.get()
     try:
-        a = parser.expr(entire_string).compile()
-        result = eval(a)
+        # Use eval() to evaluate the expression
+        result = eval(entire_string)
         clear_all()
         display.insert(0, result)
     except Exception:
@@ -75,65 +85,80 @@ def fact():
         display.insert(0, "Error")
 
 
-# Function to create a button with consistent styling
-def create_button(text, command, row, column, columnspan=1, bg="#4C566A", fg="#ECEFF4"):
-    button = Button(
-        root,
-        text=text,
-        command=command,
-        font=("Arial", 16),
-        bg=bg,
-        fg=fg,
-        bd=5,
-        relief="ridge",
-    )
-    button.grid(
-        row=row,
-        column=column,
-        columnspan=columnspan,
-        sticky=N + S + E + W,
-        padx=5,
-        pady=5,
-    )
-    return button
+# Button layout
+buttons = [
+    ("1", 2, 0),
+    ("2", 2, 1),
+    ("3", 2, 2),
+    ("4", 3, 0),
+    ("5", 3, 1),
+    ("6", 3, 2),
+    ("7", 4, 0),
+    ("8", 4, 1),
+    ("9", 4, 2),
+    ("0", 5, 1),
+    (".", 5, 2),
+    ("+", 2, 3),
+    ("-", 3, 3),
+    ("*", 4, 3),
+    ("/", 5, 3),
+    ("AC", 5, 0),
+    ("<-", 2, 5),
+    ("x!", 3, 5),
+    ("(", 4, 4),
+    (")", 4, 5),
+    ("%", 3, 4),
+    ("π", 2, 4),
+    ("^2", 5, 5),
+    ("exp", 5, 4),
+    ("=", 6, 0, 1, 6),  # Spanning 6 columns for the '=' button
+]
 
+# Create buttons dynamically
+for button in buttons:
+    text, row, col, *args = button
+    if text == "=":
+        Button(
+            root,
+            text=text,
+            font=("Arial", 18),
+            bg=ERROR_COLOR,
+            fg=TEXT_COLOR,
+            bd=5,
+            relief=RAISED,
+            command=calculate,
+        ).grid(
+            row=row,
+            column=col,
+            columnspan=args[0],
+            sticky=N + E + W + S,
+            padx=5,
+            pady=5,
+        )
+    else:
+        Button(
+            root,
+            text=text,
+            font=("Arial", 18),
+            bg=BUTTON_COLOR,
+            fg=TEXT_COLOR,
+            bd=5,
+            relief=RAISED,
+            command=lambda t=text: get_variables(t)
+            if t.isdigit() or t == "."
+            else get_operation(t)
+            if t in ["+", "-", "*", "/", "(", ")", "%", "^2", "exp", "π"]
+            else clear_all()
+            if t == "AC"
+            else undo()
+            if t == "<-"
+            else fact()
+            if t == "x!"
+            else None,
+        ).grid(row=row, column=col, sticky=N + E + W + S, padx=5, pady=5)
 
-# Adding number buttons
-create_button("1", lambda: get_variables(1), 1, 0)
-create_button("2", lambda: get_variables(2), 1, 1)
-create_button("3", lambda: get_variables(3), 1, 2)
-create_button("4", lambda: get_variables(4), 2, 0)
-create_button("5", lambda: get_variables(5), 2, 1)
-create_button("6", lambda: get_variables(6), 2, 2)
-create_button("7", lambda: get_variables(7), 3, 0)
-create_button("8", lambda: get_variables(8), 3, 1)
-create_button("9", lambda: get_variables(9), 3, 2)
-create_button("0", lambda: get_variables(0), 4, 1)
-create_button(".", lambda: get_variables("."), 4, 2)
+# Initialize the index for input
+i = 0
 
-# Adding operation buttons
-create_button("+", lambda: get_operation("+"), 1, 3, bg="#5E81AC")
-create_button("-", lambda: get_operation("-"), 2, 3, bg="#5E81AC")
-create_button("*", lambda: get_operation("*"), 3, 3, bg="#5E81AC")
-create_button("/", lambda: get_operation("/"), 4, 3, bg="#5E81AC")
-create_button("(", lambda: get_operation("("), 1, 4, bg="#81A1C1")
-create_button(")", lambda: get_operation(")"), 2, 4, bg="#81A1C1")
-create_button("π", lambda: get_operation("*3.14"), 3, 4, bg="#81A1C1")
-create_button("%", lambda: get_operation("%"), 4, 4, bg="#81A1C1")
-create_button("^2", lambda: get_operation("**2"), 1, 5, bg="#81A1C1")
-create_button("exp", lambda: get_operation("**"), 2, 5, bg="#81A1C1")
-create_button("x!", lambda: fact(), 3, 5, bg="#81A1C1")
-create_button("<-", lambda: undo(), 4, 5, bg="#BF616A")
-
-# Adding the clear and equals buttons
-create_button("AC", lambda: clear_all(), 5, 0, columnspan=2, bg="#BF616A")
-create_button("=", lambda: calculate(), 5, 2, columnspan=4, bg="#88C0D0")
-
-# Adding copyright label
-copyright_label = Label(
-    root, text="© 2023 Aya Nabil", font=("Arial", 10), bg="#2E3440", fg="#ECEFF4"
-)
-copyright_label.grid(row=6, column=0, columnspan=6, pady=10)
-
-# Run the application
+# Start the main loop
 root.mainloop()
